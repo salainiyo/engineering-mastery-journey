@@ -1,5 +1,5 @@
-from models import PublicHero, CreateHero, Hero, UpdateHero
-from database import SessionDep
+from app.models import PublicHero, CreateHero, Hero, UpdateHero
+from app.database import SessionDep
 from sqlmodel import select
 from fastapi import Query, HTTPException, APIRouter
 from typing import Annotated
