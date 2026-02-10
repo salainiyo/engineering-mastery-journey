@@ -41,8 +41,9 @@ class MemberPublic(MemberBase):
     created_at: datetime
     updated_at: datetime
     
-class MemberAndLoan(MemberPublic):
-    loans: List["PublicLoan"] = []
+class MemberDetailed(MemberPublic):
+    active_loans: List[LoanWithPayments] = []
+    completed_loans: List[LoanWithPayments] = []
 #============================= Loan models======================================================
 
 class BaseLoan(SQLModel):
@@ -52,9 +53,15 @@ class BaseLoan(SQLModel):
 class Loan(BaseLoan, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     approved_at: datetime = Field(default_factory=utcnow)
+    status: str = Field(default="active")
     member_id: int = Field(foreign_key="member.id", ondelete="CASCADE")
     member: Optional[Member] = Relationship(back_populates="loans")
     payments: List["Payments"] = Relationship(back_populates="loan", cascade_delete=True)
+    
+    @property
+    def remaining_balance(self) -> Decimal:
+        total_paid = sum(p.amount for p in self.payments)
+        return self.amount - total_paid
     
 class CreateLoan(BaseLoan):
     pass
@@ -67,6 +74,12 @@ class UpdateLoan(SQLModel):
 class PublicLoan(BaseLoan):
     id: int
     member_id: int
+    
+class LoanWithPayments(BaseLoan):
+    id: int
+    member_id: int
+    approved_at: datetime
+    payments: List[PublicPayments] = []
     
 #======================== payments models ==================================================
 
@@ -87,4 +100,5 @@ class UpdatePayments(SQLModel):
     paid_at: Optional[datetime] = Field(default_factory=utcnow)
     
 class PublicPayments(BasePayments):
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int
+    loan_id: int
