@@ -15,5 +15,6 @@ def register_payment(loan_id: int, payment: CreatePayments, session: Session=(De
         session.add(new_payment)
         session.commit()
         session.refresh(new_payment)
+        return new_payment
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))

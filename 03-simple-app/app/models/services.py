@@ -2,7 +2,7 @@ from sqlmodel import Field, SQLModel, Relationship
 from datetime import datetime, date
 from decimal import Decimal
 from typing import Optional, List
-from dependancies import utcnow
+from app.dependancies import utcnow
 
 #==================================== Member models ============================================
 # 1. THE TRUNK: Only the absolute common fields
@@ -42,7 +42,7 @@ class MemberPublic(MemberBase):
     updated_at: datetime
     
 class MemberAndLoan(MemberPublic):
-    loan: Decimal
+    loans: List["PublicLoan"] = []
 #============================= Loan models======================================================
 
 class BaseLoan(SQLModel):
@@ -65,7 +65,8 @@ class UpdateLoan(SQLModel):
     payable_at: Optional[date] = Field()
 
 class PublicLoan(BaseLoan):
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int
+    member_id: int
     
 #======================== payments models ==================================================
 
