@@ -14,6 +14,14 @@ Integrity by Default: 90%+ test coverage is the baseline.
 
 Vision & Intelligence: Mastering the lifecycle of data—from pixels and text to private orchestration.
 
+How to use this repository
+
+Each numbered folder is a phase exercise, not a finished product. The tables
+below link phases to the public projects where the same ideas are applied in
+production-shaped code. Start with `01-task-cli` for persistence basics, then
+`02-ETL-app` for ingestion, and use the project links for worked examples of
+later phases.
+
 Technical Milestones
 
 Statuses are derived from code in the public repos: Covered / Partial / Planned.
